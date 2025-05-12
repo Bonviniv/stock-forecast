@@ -6,11 +6,19 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 import { StockService } from '../../services/stock.service';
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-stock-detail',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatSlideToggleModule, NgChartsModule],
+  imports: [
+    CommonModule, 
+    MatButtonModule, 
+    MatSlideToggleModule, 
+    NgChartsModule,
+    FormsModule  // Add FormsModule here
+  ],
   template: `
     <div class="container">
       <header>
@@ -23,7 +31,11 @@ import { StockService } from '../../services/stock.service';
 
       <div class="chart-container">
         <div class="chart-controls">
-          <mat-slide-toggle>AI Prediction</mat-slide-toggle>
+           <div class="AItoggle">
+          <mat-slide-toggle [(ngModel)]="showAIPrediction" (change)="loadStockData(activeTimeWindow)">
+            AI Prediction
+          </mat-slide-toggle>
+          </div>
         </div>
         <canvas baseChart
           [data]="chartData"
@@ -51,8 +63,10 @@ import { StockService } from '../../services/stock.service';
 })
 export class StockDetailComponent implements OnInit {
   stockSymbol: string = '';
+  showAIPrediction: boolean = false;  // Add this property
   activeTimeWindow: 'week' | 'month' | 'year' | 'decade' = 'week';
   private currentUrl: string = '';
+  
   chartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
     datasets: [{
@@ -75,7 +89,8 @@ export class StockDetailComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private stockService: StockService
+    private stockService: StockService,
+    private http: HttpClient  // Add HttpClient here
   ) {
     this.currentUrl = this.router.url;
     this.router.events.subscribe((event) => {
@@ -107,7 +122,7 @@ export class StockDetailComponent implements OnInit {
     this.loadStockData(period);
   }
 
-  private loadStockData(period: 'week' | 'month' | 'year' | 'decade') {
+  public loadStockData(period: 'week' | 'month' | 'year' | 'decade') {
     this.stockService.getStockData(this.stockSymbol).subscribe({
       next: (data) => {
         let chartData: { timestamp: number; price: number; }[];
@@ -121,26 +136,19 @@ export class StockDetailComponent implements OnInit {
             break;
           case 'year':
             chartData = data.daily.slice(-365);
-            console.log('Year View Monthly Values:');
-            this.logMonthlyValues(chartData);
             break;
           case 'decade':
-            // Use monthly data for decade view
             chartData = data.monthly;
-            console.log('Decade View Monthly Values:');
-            this.logMonthlyValues(chartData);
             break;
         }
-    
-        this.chartData = {
+
+        // Create base chart data first
+        const baseChartData = {
           labels: chartData.map(d => {
             const date = new Date(d.timestamp * 1000);
-            if (period === 'decade') {
-              return date.toLocaleDateString('en-US', { month: '2-digit', year: '2-digit' });
-            } else if (period === 'week' || period === 'month' || period === 'year') {
-              return date.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit' });
-            }
-            return date.toLocaleString();
+            return period === 'decade' 
+              ? date.toLocaleDateString('en-US', { month: '2-digit', year: '2-digit' })
+              : date.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit' });
           }),
           datasets: [{
             data: chartData.map(d => d.price),
@@ -151,6 +159,68 @@ export class StockDetailComponent implements OnInit {
             backgroundColor: 'rgba(187, 134, 252, 0.3)'
           }]
         };
+
+        if (!this.showAIPrediction) {
+          this.chartData = baseChartData;
+          return;
+        }
+
+        // Handle prediction data
+        this.http.get<any>(`assets/data/JsonPrevisoes/${this.stockSymbol}.json`).subscribe({
+          next: (predictionJson) => {
+            console.log('Prediction data:', predictionJson); // Debug log
+            
+            let prediction;
+            switch (period) {
+              case 'week':
+                prediction = predictionJson.predictionDay?.[0];
+                break;
+              case 'month':
+                prediction = predictionJson.predictionWeek?.[0];
+                break;
+              case 'year':
+                prediction = predictionJson.predictionMonth?.[0];
+                break;
+              case 'decade':
+                prediction = predictionJson.predictionYear?.[0];
+                break;
+            }
+
+            console.log('Selected prediction:', prediction); // Debug log
+
+            if (prediction) {
+              const lastRealPrice = chartData[chartData.length - 1].price;
+              const predictionDate = new Date(prediction.Date);
+              
+              const predictionLabel = predictionDate.toLocaleDateString('en-US', 
+                period === 'decade' ? { month: '2-digit', year: '2-digit' } : { day: '2-digit', month: '2-digit' });
+
+              const predictionDataset = {
+                data: Array(chartData.length).fill(null),
+                label: 'AI Prediction',
+                borderColor: 'rgba(255, 0, 0, 1)',
+                backgroundColor: 'rgba(255, 0, 0, 0.3)',
+                borderDash: [5, 5],
+                fill: false
+              };
+              
+              // Add the last two points for the prediction line
+              predictionDataset.data[predictionDataset.data.length - 1] = lastRealPrice;
+              predictionDataset.data.push(prediction.Close);
+
+              this.chartData = {
+                labels: [...baseChartData.labels, predictionLabel],
+                datasets: [baseChartData.datasets[0], predictionDataset]
+              };
+            } else {
+              this.chartData = baseChartData;
+            }
+          },
+          error: (error) => {
+            console.error('Error loading prediction:', error);
+            this.chartData = baseChartData;
+          }
+        });
       },
       error: (error) => {
         console.error('Error fetching stock data:', error);

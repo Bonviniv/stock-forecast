@@ -1,59 +1,115 @@
-# StockForecast
+# 📈 Stock Forecast
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
+A modern web application for stock market analysis and AI-powered price predictions. Built with Angular, this application provides real-time stock data visualization and predictive analytics. 🚀
 
-## Development server
+## ✨ Features
 
-To start a local development server, run:
+- 📊 Real-time stock data visualization
+- 🤖 AI-powered price predictions
+- 📱 Interactive charts with multiple timeframes
+- 🔍 Searchable stock listings
+- 💅 Responsive material design interface
 
+## 🛠️ Technologies Used
+
+### 🌐 Frontend
+- ⚡ Angular 16+
+- 🎨 Angular Material UI
+- 📊 Chart.js with ng2-charts
+- 📝 TypeScript
+- 🎯 SCSS for styling
+
+### 🔬 Data Processing
+- 🐍 Python (Jupyter Notebooks)
+- 📚 Data Analysis Libraries:
+  - 🐼 Pandas
+  - 🔢 NumPy
+  - 🧠 Scikit-learn (for predictions)
+
+## 📁 Project Structure
+
+```plaintext
+src/
+├── app/
+│   ├── components/        # Reusable UI components
+│   ├── core/             # Core functionality
+│   │   ├── models/       # Data models
+│   │   └── services/     # API and data services
+│   ├── pages/            # Main application pages
+│   └── services/         # Application services
+├── assets/
+│   └── data/            # Static data files
+└── pythonFiles/         # Data processing scripts
+## 🚀 Getting Started
+### 📋 Prerequisites
+- 📦 Node.js (v14 or higher)
+- 🔧 npm (v6 or higher)
+- ⚙️ Angular CLI
+### 💻 Installation
+1. Clone the repository:
+```bash
+git clone <repository-url>
+ ```
+
+2. Navigate to the project directory:
+```bash
+cd stock-forecast
+ ```
+
+3. Install dependencies:
+```bash
+npm install
+ ```
+
+4. Start the development server:
 ```bash
 ng serve
-```
+ ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+5. Open your browser and navigate to http://localhost:4200 🌐
+## 📱 Usage
+1. 🏠 Home Page
+   
+   - Browse the list of available stocks
+   - Use the search bar to filter stocks by symbol or name
+   - Click on any stock card to view detailed information
+2. 📊 Stock Detail Page
+   
+   - View detailed stock price charts
+   - Toggle between different timeframes (Week, Month, Year, Decade)
+   - Enable AI predictions to see forecasted prices
+   - Use the back button to return to the stock list
+## 🔬 Data Processing
+The project includes several Jupyter notebooks in the pythonFiles directory:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- 📥 getStockValues.ipynb : Fetches historical stock data
+- 📝 getStocksNames.ipynb : Retrieves stock symbols and company information
+- 📊 getValueDayleDecade.ipynb : Processes daily to decade-level data
+- 🤖 predictionsMaker.ipynb : Generates AI-powered price predictions
+## 👩‍💻 Development
+### 🏗️ Code Scaffolding
+Generate new components using Angular CLI:
 
 ```bash
 ng generate component component-name
+ ```
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 🚀 Building for Production
+Build the project for production:
 
 ```bash
-ng generate --help
+ng build --configuration production
+ ```
 ```
 
-## Building
+The build artifacts will be stored in the dist/ directory. 📦
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🤝 Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+## 📄 License
+This project is licensed under the MIT License - see the LICENSE file for details. ⚖️
