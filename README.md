@@ -25,6 +25,13 @@ A modern web application for stock market analysis and AI-powered price predicti
   - 🐼 Pandas
   - 🔢 NumPy
   - 🧠 Scikit-learn (for predictions)
+ 
+    
+## 📦 Data Integration
+The stock data processed with Python is stored as JSON files, which are accessed by the Angular frontend for fast and structured rendering.
+
+To simulate real-time API calls, Python scripts mimic external requests and generate fresh JSONs. This creates a more stable and controlled environment for demonstrations, avoiding rate limits and external downtime.
+
 
 ## 📁 Project Structure
 
