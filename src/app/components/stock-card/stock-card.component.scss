@@ -1,0 +1,24 @@
+.stock-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+  
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 8px 0;
+  }
+
+  .change {
+    &.positive {
+      color: #4caf50;
+    }
+    
+    &.negative {
+      color: #f44336;
+    }
+  }
+}

@@ -1,0 +1,53 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+
+  h1 {
+    margin: 0;
+    color: var(--text-color);
+  }
+}
+
+.chart-container {
+  background-color: var(--surface-color);
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+
+  .chart-controls {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .time-controls {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+
+    button {
+      min-width: 100px;
+    }
+  }
+}
+
+.time-controls {
+  button {
+    border-radius: 20px;
+    margin: 0 4px;
+  }
+  button.active {
+    box-shadow: 0 2px 4px rgba(187, 134, 252, 0.4);
+    background-color: rgba(187, 134, 252, 0.1);
+    
+  }
+}

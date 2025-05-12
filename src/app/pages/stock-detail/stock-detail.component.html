@@ -1,0 +1,25 @@
+<div class="detail-container" *ngIf="stock">
+  <div class="header">
+    <h1>{{ stock.symbol }}</h1>
+    <div class="price-info">
+      <div class="current-price">${{ stock.currentPrice | number:'1.2-2' }}</div>
+      <div class="change" [ngClass]="{'positive': stock.change > 0, 'negative': stock.change < 0}">
+        {{ stock.change | number:'1.2-2' }} ({{ stock.changePercent | number:'1.2-2' }}%)
+      </div>
+    </div>
+  </div>
+
+  <div class="timeframe-selector">
+    <button mat-button *ngFor="let tf of timeframes"
+            [class.selected]="tf === selectedTimeframe"
+            (click)="onTimeframeChange(tf)">
+      {{ tf }}
+    </button>
+  </div>
+
+  <app-stock-chart
+    [historicalData]="historicalData"
+    [predictions]="predictions"
+    [timeframe]="selectedTimeframe">
+  </app-stock-chart>
+</div>
