@@ -1,9 +1,17 @@
+@import '@angular/material/prebuilt-themes/purple-green.css';
+
 :root {
   --background-color: #121212;
   --surface-color: #1e1e1e;
   --primary-color: #bb86fc;
   --text-color: #ffffff;
   --text-secondary: #b3b3b3;
+}
+
+body {
+  background-color: var(--background-color);
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 * {

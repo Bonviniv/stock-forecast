@@ -14,8 +14,9 @@ import { HttpClient } from '@angular/common/http';
     CommonModule, 
     MatIconModule, 
     MatInputModule, 
-    MatCardModule, 
-    MatGridListModule
+    MatCardModule,  // Make sure this is imported
+    MatGridListModule,
+    // Add any other necessary Material modules
   ],
   template: `
     <div class="container">
